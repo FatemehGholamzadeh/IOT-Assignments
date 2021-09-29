@@ -1,0 +1,24 @@
+from coapthon.client.helperclient import HelperClient
+import random
+import serial
+from time import sleep
+
+host = "192.168.43.170"
+port = 5683
+path ="basic"
+
+client = HelperClient(server=(host, port))
+# data = str(int((random.random()*100)))
+s = serial.Serial('com4',9600)
+s.flushInput()
+data = s.readline().decode("utf-8")
+print("number is : " )
+print(data)
+client.put(path, data)
+sleep(10)
+response = client.get(path)
+command = response.payload.decode("utf-8")
+print("command is : ")
+print(command)
+s.write(command.encode())
+client.stop()
